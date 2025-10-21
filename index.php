@@ -17,11 +17,10 @@
                 <input type="password" placeholder="Contraseña">
             </div>
             <div class="inputBx">
-                <input type="submit" value="Registrarse">
+                <input type="submit" value="CONTINUAR">
             </div>
             <div class="links">
-                <a href="#">Forget Password</a>
-                <a href="#">Signup</a>
+                <a href="#">Registrar-se</a>
             </div>
         </div>
     </div>
