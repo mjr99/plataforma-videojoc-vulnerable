@@ -1,7 +1,7 @@
 <?php
-// db_mysqli.php
+// db_mysqli.php // ip per cable 172.18.33.247
 // Dades de connexió
-$host = "172.18.33.247"; // usa localhost si el servidor MySQL está en la misma máquina
+$host = "172.20.0.108"; // usa localhost si el servidor MySQL está en la misma máquina
 $user = "usuariweb";
 $password = "password123"; // sin contraseña
 $database = "plataforma_videojocs";
