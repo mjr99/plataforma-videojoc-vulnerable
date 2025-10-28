@@ -19,12 +19,15 @@
 		</header>
 
 		<section>
-			<article style="--avarage-color: #afa294">
-				<figure>
-					<img src="/FOTOS/nave.jpg">
+			<a href="https://www.google.com">
+				<article style="--avarage-color: #afa294">
+                <figure>
+					<img src="./../../img/nave.jpg">
 					<figcaption>STARBLAST</figcaption>
 				</figure>
 			</article>
+			</a>
+			
 
 			<article style="--avarage-color: #3c3c3d">
 				<figure>

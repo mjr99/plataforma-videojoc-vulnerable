@@ -20,7 +20,7 @@
                 <input type="submit" value="CONTINUAR">
             </div>
             <div class="links">
-                <a href="#">Registrar-se</a>
+                <a href="./bakend/registre.php">Registrar-se</a>
             </div>
         </div>
     </div>
