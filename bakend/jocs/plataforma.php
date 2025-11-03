@@ -1,61 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/css_base/iniciojuego.css">
-
-	<title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css_base/iniciojuego.css">
+    <title>Document</title>
 </head>
-
 <body>
-	<main>
+    <main>
+        <header>
+            <h1>Juegos Pau & Marc - 2025</h1>
 
+            <?php
+            require_once '/var/www/html/bakend/jocs/datosservidor.php';
+            $sql = "SELECT foto_perfil FROM perfil_usuario ORDER BY id DESC LIMIT 1";
+            $result = $conn->query($sql);
+            $foto = ($result && $result->num_rows > 0) ? $result->fetch_assoc()['foto_perfil'] : 'uploads/default.jpg';
+            ?>
+            <div class="avatar-container">
+                <a href="/bakend/jocs/perfil.php">
+                    <img src="/<?= $foto ?>" alt="Perfil" class="avatar">
+                </a>
+            </div>
+        </header>
 
+        <section>
+            <a href="https://www.google.com">
+                <article style="--avarage-color: #afa294">
+                    <figure>
+                        <img src="./../../img/nave.jpg">
+                        <figcaption>STARBLAST</figcaption>
+                    </figure>
+                </article>
+            </a>
 
-		<header>
-			<h1>Juegos Pau & Marc - 2025</h1>
-		</header>
-
-		<section>
-			<a href="https://www.google.com">
-				<article style="--avarage-color: #afa294">
+            <article style="--avarage-color: #3c3c3d">
                 <figure>
-					<img src="./../../img/nave.jpg">
-					<figcaption>STARBLAST</figcaption>
-				</figure>
-			</article>
-			</a>
-			
+                    <img src="https://i.imgur.com/MwRrRSd.jpeg">
+                    <figcaption>Bibliomania</figcaption>
+                </figure>
+            </article>
 
-			<article style="--avarage-color: #3c3c3d">
-				<figure>
-					<img src="https://i.imgur.com/MwRrRSd.jpeg">
-					<figcaption>Bibliomania</figcaption>
-				</figure>
-			</article>
+            <article style="--avarage-color: #b47460">
+                <figure>
+                    <img src="https://i.imgur.com/7FQ6L5j.jpeg">
+                    <figcaption>Dandadan</figcaption>
+                </figure>
+            </article>
 
-			<article style="--avarage-color: #b47460">
-				<figure>
-					<img src="https://i.imgur.com/7FQ6L5j.jpeg">
-					<figcaption>Dandadan</figcaption>
-				</figure>
-			</article>
-
-			<article style="--avarage-color: #60a6ce">
-				<figure>
-					<img src="https://i.imgur.com/IQSq88g.jpeg">
-					<figcaption>The Summer Hikaru Died</figcaption>
-				</figure>
-			</article>
-
-
-
-		</section>
-
-	</main>
-
+            <article style="--avarage-color: #60a6ce">
+                <figure>
+                    <img src="https://i.imgur.com/IQSq88g.jpeg">
+                    <figcaption>The Summer Hikaru Died</figcaption>
+                </figure>
+            </article>
+        </section>
+    </main>
 </body>
-
 </html>

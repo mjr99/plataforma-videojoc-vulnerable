@@ -11,28 +11,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($usuario === '' || $contrasenya === '') {
         $mensaje = "❌ Faltan campos por rellenar";
     } else {
-        $sql = "SELECT * FROM usuaris WHERE nom_usuari = ?";
+        // 💡 CAMBIO 1: La consulta busca tanto el usuario COMO la contraseña
+        // Recuerda: la columna se llama 'password_hash', pero almacena texto plano.
+        $sql = "SELECT * FROM usuaris WHERE nom_usuari = ? AND password_hash = ?"; 
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $usuario);
+        
+        // 💡 CAMBIO 2: Vincula el usuario Y la contraseña (texto plano)
+        $stmt->bind_param("ss", $usuario, $contrasenya);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows === 1) {
-            $fila = $result->fetch_assoc();
-            $hash_guardado = $fila['password_hash'];
+        // 💡 CAMBIO 3: Si encuentra 1 fila, es correcto.
+        if ($fila = $result->fetch_assoc()) {             
+            // Éxito:
+            $_SESSION['usuario'] = $fila['nom_usuari'];
+            $_SESSION['email'] = $fila['email'];
+            $_SESSION['nombre'] = $fila['nom_complet'];
 
-            if (password_verify($contrasenya, $hash_guardado)) {
-                $_SESSION['usuario'] = $fila['nom_usuari'];
-                $_SESSION['email'] = $fila['email'];
-                $_SESSION['nombre'] = $fila['nom_complet'];
-
-                header("Location: /bakend/jocs/plataforma.php");
-                exit();
-            } else {
-                $mensaje = "❌ Contraseña incorrecta";
-            }
+            header("Location: /bakend/jocs/plataforma.php");
+            exit();
+            
         } else {
-            $mensaje = "❌ Usuario no encontrado";
+            // El usuario o la contraseña son incorrectos
+            $mensaje = "❌ Usuario o contraseña incorrectos"; 
         }
 
         $stmt->close();
