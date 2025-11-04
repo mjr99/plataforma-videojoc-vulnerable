@@ -22,17 +22,33 @@ body {
 }
 
 .jugador {
-    background-color: lightblue;
+ background-image: url("/img/nave2.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent; 
+  
+  
 }
-
-.enemic {
-    background-color: lightcoral;
+.laser {
+  position: absolute;
+  background-color: red;
+  width: 12px;
+  height: 6px;
+  border-radius: 2px;
+  z-index: 2;
 }
 
 .asteroide {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-image: url("/img/asteroide.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
   border-radius: 50%;
+  width: 30px;
+  height: 30px;
 }
 
 #infoPartida {
