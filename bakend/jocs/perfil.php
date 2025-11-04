@@ -50,8 +50,19 @@ $conn->close();
 </head>
 <body>
     <div class="perfil-container">
-        <h1>🎮 Personalitza el teu perfil</h1>
+        <div class="titulo">
+            <h1>🎮 Personalitza el teu perfil</h1>
+            <div>
+                <img src="" alt="">
+                <h2>usuari</h2>
+            </div>
+        </div>
+        
         <form action="perfil.php" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="usuari">Cambiar nom d'usuari</label>
+                <input type="text" name="apodo" id="apodo" placeholder="Cambiar nom d'usuari">
+            </div>
             <div class="form-group">
                 <label for="apodo">Apodo</label>
                 <input type="text" name="apodo" id="apodo" placeholder="Tria un apodo">

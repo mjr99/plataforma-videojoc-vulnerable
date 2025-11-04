@@ -1,18 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Quicksand", sans-serif;
 }
+
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #111; 
-    color: #fff; 
+  background: #111; /* Fondo oscuro del login */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
+
 .border {
   position: relative;
   width: 500px;
@@ -45,6 +48,7 @@ body {
   position: relative;
   width: 100%;
   height: 13%;
+  margin-bottom: 10px;
 }
 
 .login .inputBx input {
@@ -61,12 +65,18 @@ body {
 }
 
 .login .inputBx input[type="submit"] {
-  width: 100%;
-  background: #0078ff;
-  background: linear-gradient(45deg, #e4ff35, #72ff91);
+  width: 100%; 
+  padding: 15px;
   border: none;
+  border-radius: 40px; 
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #111; 
   cursor: pointer;
+  transition: opacity 0.3s ease;
+  background: linear-gradient(45deg, #e4ff35, #72ff91);
 }
+
 .login .inputBx input::placeholder {
   color: rgba(255, 255, 255, 0.75);
 }

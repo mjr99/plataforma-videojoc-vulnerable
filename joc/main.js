@@ -14,8 +14,11 @@ const maxAsteroides = 20;
 const pantalla = document.querySelector("#pantalla");
 const infoPartida = document.querySelector("#infoPartida");
 
+// Recuperar nombre del usuario desde sessionStorage
+//const nomUsuari = sessionStorage.getItem("nom_usuari") || "Jugador";
+const nomUsuari = window.config.nomUsuari;
 // Jugador
-const jugador = new Jugador("Pepito", 3, 10, {x: 100, y: 300}, 150, 100);
+const jugador = new Jugador(nomUsuari, 3, 10, {x: 100, y: 300}, 150, 100);
 pantalla.append(jugador.elementHTML);
 
 // Asteroides inicials

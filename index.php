@@ -3,6 +3,7 @@ session_start();
 require_once '/var/www/html/bakend/jocs/datosservidor.php';
 
 $mensaje = '';
+$joc_id = 1; // ID del juego STARBLAST
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['usuario'] ?? '');
@@ -11,29 +12,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($usuario === '' || $contrasenya === '') {
         $mensaje = "❌ Faltan campos por rellenar";
     } else {
-        // 💡 CAMBIO 1: La consulta busca tanto el usuario COMO la contraseña
-        // Recuerda: la columna se llama 'password_hash', pero almacena texto plano.
-        $sql = "SELECT * FROM usuaris WHERE nom_usuari = ? AND password_hash = ?"; 
+        $sql = "SELECT * FROM usuaris WHERE nom_usuari = ? AND password_hash = ?";
         $stmt = $conn->prepare($sql);
-        
-        // 💡 CAMBIO 2: Vincula el usuario Y la contraseña (texto plano)
         $stmt->bind_param("ss", $usuario, $contrasenya);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // 💡 CAMBIO 3: Si encuentra 1 fila, es correcto.
-        if ($fila = $result->fetch_assoc()) {             
-            // Éxito:
+        if ($fila = $result->fetch_assoc()) {
+            // Guardar datos del usuario en sesión
             $_SESSION['usuario'] = $fila['nom_usuari'];
             $_SESSION['email'] = $fila['email'];
             $_SESSION['nombre'] = $fila['nom_complet'];
+            $_SESSION['usuari_id'] = $fila['id'];
+
+            // Recuperar progreso del juego STARBLAST
+            $sql = "SELECT nivell_actual, puntuacio_maxima FROM progres_usuari WHERE usuari_id = ? AND joc_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ii", $fila['id'], $joc_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $progres = $result->fetch_assoc();
+
+            $_SESSION['nivell'] = $progres['nivell_actual'] ?? 1;
+            $_SESSION['punts'] = $progres['puntuacio_maxima'] ?? 0;
 
             header("Location: /bakend/jocs/plataforma.php");
             exit();
-            
         } else {
-            // El usuario o la contraseña son incorrectos
-            $mensaje = "❌ Usuario o contraseña incorrectos"; 
+            $mensaje = "❌ Usuario o contraseña incorrectos";
         }
 
         $stmt->close();

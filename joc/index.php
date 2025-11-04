@@ -1,3 +1,7 @@
+<?php
+session_start();
+$nom_usuari = $_SESSION['usuario'] ?? 'Jugador';
+?>
 <!DOCTYPE html>
 <html lang="ca">
   <head>
@@ -5,14 +9,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Joc interactiu HTML, CSS i JavaScript</title>
     <meta name="description" content="Joc JS per treballar la manipulació del DOM, la gestió d'esdeveniments i la POO." />
-    <meta name="author" content="Xavi Garcia @xavig-icv" />
-    <meta name="copyright" content="Xavi Garcia @xavig-icv" />
+    <meta name="author" content="Pau Torres y Marc Jimenez" />
+    <meta name="copyright" content="Pau Torres y Marc Jimenez" />
     <link rel="stylesheet" href="./index.css" />
+    <script>
+      window.config = <?php echo json_encode(['nomUsuari' => $nom_usuari,]); ?>;
+    </script>
+    <script src="./classes.js" defer></script>
+    <script src="./main.js" defer></script>
   </head>
   <body>
     <div id="pantalla"></div>
     <div id="infoPartida"></div>
-    <script src="./classes.js"></script>
-    <script src="./main.js"></script>
+    
   </body>
 </html>

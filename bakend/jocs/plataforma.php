@@ -7,6 +7,18 @@
     <title>Document</title>
 </head>
 <body>
+    <?php
+        session_start();
+        $nom_usuari = $_SESSION['usuario'] ?? 'Jugador';
+
+        ?>
+
+        <script>
+        const usuari = <?php echo $nom_usuari; ?>
+        // Guardamos el nombre del usuario en sessionStorage
+        sessionStorage.setItem("nom_usuari", "<?php echo $nom_usuari; ?>");
+        </script>
+
     <main>
         <header>
             <h1>Juegos Pau & Marc - 2025</h1>
@@ -19,13 +31,17 @@
             ?>
             <div class="avatar-container">
                 <a href="/bakend/jocs/perfil.php">
+                    <span><?php echo $nom_usuari; ?></span>
+                    <p>Nivell recuperat: <?php echo $_SESSION['nivell']; ?></p>
+                    <p>Punts recuperats: <?php echo $_SESSION['punts']; ?></p>
+
                     <img src="/<?= $foto ?>" alt="Perfil" class="avatar">
                 </a>
             </div>
         </header>
 
         <section>
-            <a href="https://www.google.com">
+            <a href="./../../joc/index.php">
                 <article style="--avarage-color: #afa294">
                     <figure>
                         <img src="./../../img/nave.jpg">

@@ -1,0 +1,23 @@
+<?php
+require_once 'datosservidor.php';
+
+$usuari_id = $_GET['usuari_id'] ?? null;
+$joc_id = $_GET['joc_id'] ?? 1;
+
+$sql = "SELECT nivell_actual, puntuacio_maxima, partides_jugades, ultima_partida 
+        FROM progres_usuari 
+        WHERE usuari_id = ? AND joc_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $usuari_id, $joc_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$progres = $result->fetch_assoc();
+
+header('Content-Type: application/json');
+echo json_encode($progres ?: [
+    "nivell_actual" => 1,
+    "puntuacio_maxima" => 0,
+    "partides_jugades" => 0,
+    "ultima_partida" => null
+]);
+?>
