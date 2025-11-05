@@ -1,5 +1,5 @@
 <?php
-require_once 'datosservidor.php';
+require_once './datosservidor.php';
 
 $sql = "SELECT u.nom_usuari, p.punts, p.data_partida 
         FROM partides p 

@@ -31,7 +31,7 @@ body {
 
 /* Título */
 .perfil-container h1 {
-    margin-bottom: 15px; 
+    margin-bottom: 0px; 
     font-size: 2em; 
     font-weight: 500;
     color: #fff; 
@@ -60,6 +60,7 @@ label {
 
 /* Campos de Input (Apodo y Biografía) */
 input[type="text"],
+input[type="password"],
 
 textarea {
     width: 100%;
@@ -77,6 +78,21 @@ textarea {
     resize: none;
     border-radius: 20px; 
     padding: 15px 20px;
+}
+
+/* Estilo para la línea separadora */
+.separador-perfil {
+    width: 100%; /* Ocupa el 80% del ancho del contenedor */
+    height: 3px; /* Grosor de la línea */
+    margin: 10px auto 35px auto; /* Centrado y espaciado (arriba: 10px, abajo: 35px) */
+    
+    /* Degradado sutil para que coincida con el tema neón */
+    background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0) 0%, /* Blanco transparente al inicio */
+                rgba(255, 255, 255, 0.4) 50%, /* Blanco sutil en el centro */
+                rgba(255, 255, 255, 0) 100% /* Blanco transparente al final */
+               );
+    border-radius: 2px;
 }
 
 /* Estilo específico para el campo de archivo */

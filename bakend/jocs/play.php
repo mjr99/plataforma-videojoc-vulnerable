@@ -2,9 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-include "/var/www/html/bakend/jocs/datosservidor.php";
-
-
+include "./datosservidor.php";
 
 // ❌ No se valida la entrada
 $joc_id = $_GET['joc'] ?? 1;

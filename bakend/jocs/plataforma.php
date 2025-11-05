@@ -1,3 +1,25 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once './datosservidor.php';
+
+$joc_id = 1;
+$usuari_id = $_SESSION['usuari_id'] ?? null;
+
+if ($usuari_id) {
+    $sql = "SELECT nivell_actual, puntuacio_maxima FROM progres_usuari WHERE usuari_id = ? AND joc_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $usuari_id, $joc_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $progres = $result->fetch_assoc();
+
+    $nivell = $progres['nivell_actual'] ?? 1;
+    $punts = $progres['puntuacio_maxima'] ?? 0;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,16 +46,19 @@
             <h1>Juegos Pau & Marc - 2025</h1>
 
             <?php
-            require_once '/var/www/html/bakend/jocs/datosservidor.php';
+            require_once './datosservidor.php';
             $sql = "SELECT foto_perfil FROM perfil_usuario ORDER BY id DESC LIMIT 1";
             $result = $conn->query($sql);
             $foto = ($result && $result->num_rows > 0) ? $result->fetch_assoc()['foto_perfil'] : 'uploads/default.jpg';
             ?>
             <div class="avatar-container">
-                <a href="/bakend/jocs/perfil.php">
+                <a href="./perfil.php">
                     <span><?php echo $nom_usuari; ?></span>
-                    <p>Nivell recuperat: <?php echo $_SESSION['nivell']; ?></p>
-                    <p>Punts recuperats: <?php echo $_SESSION['punts']; ?></p>
+                    <div class="perfil">
+                        <p>Usuari: <?= $_SESSION['usuario'] ?></p>
+                        <p>Nivell: <?= $nivell ?></p>
+                        <p>Punts: <?= $punts ?></p>
+                    </div>
 
                     <img src="/<?= $foto ?>" alt="Perfil" class="avatar">
                 </a>
@@ -42,7 +67,7 @@
 
         <section>
             <a href="./../../joc/index.php">
-                <article style="--avarage-color: #afa294">
+                <article style="--avarage-color: #94af95ff">
                     <figure>
                         <img src="./../../img/nave.jpg">
                         <figcaption>STARBLAST</figcaption>
@@ -52,22 +77,22 @@
 
             <article style="--avarage-color: #3c3c3d">
                 <figure>
-                    <img src="https://i.imgur.com/MwRrRSd.jpeg">
-                    <figcaption>Bibliomania</figcaption>
+                    <img src="">
+                    <figcaption>?????????</figcaption>
                 </figure>
             </article>
 
             <article style="--avarage-color: #b47460">
                 <figure>
-                    <img src="https://i.imgur.com/7FQ6L5j.jpeg">
-                    <figcaption>Dandadan</figcaption>
+                    <img src="">
+                    <figcaption>?????????</figcaption>
                 </figure>
             </article>
 
             <article style="--avarage-color: #60a6ce">
                 <figure>
-                    <img src="https://i.imgur.com/IQSq88g.jpeg">
-                    <figcaption>The Summer Hikaru Died</figcaption>
+                    <img src="">
+                    <figcaption>?????????</figcaption>
                 </figure>
             </article>
         </section>

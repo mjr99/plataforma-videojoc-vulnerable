@@ -4,7 +4,7 @@ const pantallaAlt = window.innerHeight;
 const fotogrames = 1000 / 60;
 
 // Variables de partida
-let nivell = 1;
+let nivell = window.config.nivell || 1;
 let finalBoss = null;
 const vectorAsteroides = [];
 const vectorLasers = [];
@@ -14,10 +14,8 @@ const maxAsteroides = 20;
 const pantalla = document.querySelector("#pantalla");
 const infoPartida = document.querySelector("#infoPartida");
 
-// Recuperar nombre del usuario desde sessionStorage
-//const nomUsuari = sessionStorage.getItem("nom_usuari") || "Jugador";
+// Recuperar nombre del usuario
 const nomUsuari = window.config.nomUsuari;
-// Jugador
 const jugador = new Jugador(nomUsuari, 3, 10, {x: 100, y: 300}, 150, 100);
 pantalla.append(jugador.elementHTML);
 
@@ -106,6 +104,9 @@ function passarDeNivell() {
   missatge.style.zIndex = "100";
   pantalla.append(missatge);
   setTimeout(() => missatge.remove(), 2000);
+
+  // ✅ Guardar progreso al subir de nivel
+  guardarProgreso();
 }
 
 // Missatge de victòria
@@ -132,38 +133,32 @@ setInterval(() => {
     asteroide.moure();
   });
 
-  // Regenerar asteroides si queden 10 o menys
   if (vectorAsteroides.length <= 10 && !finalBoss) {
     for (let i = 0; i < 5; i++) {
       let posX = pantallaAmple + Math.floor(Math.random() * 100);
       let posY = Math.floor(Math.random() * pantallaAlt - 3);
       let velocitat = Math.random() * 1.5 + 0.2;
 
+      let nouAsteroide;
       if (nivell === 3) {
         velocitat += 2;
-        const nouAsteroide = new Asteroide(velocitat, {x: posX, y: posY}, 100, 100);
+        nouAsteroide = new Asteroide(velocitat, {x: posX, y: posY}, 100, 100);
         nouAsteroide.elementHTML.style.backgroundImage = 'url("/img/misilalien.gif")';
-        nouAsteroide.elementHTML.style.width = "100px";
-        nouAsteroide.elementHTML.style.height = "100px";
-        pantalla.append(nouAsteroide.elementHTML);
-        vectorAsteroides.push(nouAsteroide);
       } else if (nivell === 2) {
         velocitat += 1;
-        const nouAsteroide = new Asteroide(velocitat, {x: posX, y: posY}, 50, 50);
+        nouAsteroide = new Asteroide(velocitat, {x: posX, y: posY}, 50, 50);
         nouAsteroide.elementHTML.style.backgroundImage = 'url("/img/fireball2.png")';
-        nouAsteroide.elementHTML.style.width = "50px";
-        nouAsteroide.elementHTML.style.height = "50px";
-        pantalla.append(nouAsteroide.elementHTML);
-        vectorAsteroides.push(nouAsteroide);
       } else {
-        const nouAsteroide = new Asteroide(velocitat, {x: posX, y: posY}, 30, 30);
-        pantalla.append(nouAsteroide.elementHTML);
-        vectorAsteroides.push(nouAsteroide);
+        nouAsteroide = new Asteroide(velocitat, {x: posX, y: posY}, 30, 30);
       }
+
+      nouAsteroide.elementHTML.style.width = `${nouAsteroide.ample}px`;
+      nouAsteroide.elementHTML.style.height = `${nouAsteroide.alt}px`;
+      pantalla.append(nouAsteroide.elementHTML);
+      vectorAsteroides.push(nouAsteroide);
     }
   }
 
-  // Boss final
   if (finalBoss) {
     finalBoss.moure();
     finalBoss.dibuixar();
@@ -172,7 +167,6 @@ setInterval(() => {
     }
   }
 
-  // Làsers del boss
   for (let i = vectorLasersBoss.length - 1; i >= 0; i--) {
     const laser = vectorLasersBoss[i];
     laser.moure();
@@ -189,7 +183,6 @@ setInterval(() => {
     }
   }
 
-  // Col·lisions amb el jugador
   for (let i = vectorAsteroides.length - 1; i >= 0; i--) {
     const asteroide = vectorAsteroides[i];
 
@@ -212,13 +205,11 @@ setInterval(() => {
     }
   }
 
-  // Làsers del jugador
   for (let i = vectorLasers.length - 1; i >= 0; i--) {
     const laser = vectorLasers[i];
     laser.dibuixar();
     laser.moure();
 
-    // Colisión con el jefe final
     if (finalBoss && colisiona(laser, finalBoss)) {
       laser.elementHTML.remove();
       vectorLasers.splice(i, 1);
@@ -233,33 +224,55 @@ setInterval(() => {
       continue;
     }
 
-    // Colisión con asteroides
     for (let j = vectorAsteroides.length - 1; j >= 0; j--) {
       const asteroide = vectorAsteroides[j];
 
-      if (colisiona(laser, asteroide)) {
-        asteroide.elementHTML.remove();
-        laser.elementHTML.remove();
-        vectorAsteroides.splice(j, 1);
-        vectorLasers.splice(i, 1);
-        jugador.punts += 10;
-        jugador.derribats += 1;
-        elementPunts.innerHTML = `Punts: ${jugador.punts}`;
-        elementDerribats.innerHTML = `Kills: ${jugador.derribats}`;
+              if (colisiona(laser, asteroide)) {
+          asteroide.elementHTML.remove();
+          laser.elementHTML.remove();
+          vectorAsteroides.splice(j, 1);
+          vectorLasers.splice(i, 1);
+          jugador.punts += 10;
+          jugador.derribats += 1;
+          elementPunts.innerHTML = `Punts: ${jugador.punts}`;
+          elementDerribats.innerHTML = `Kills: ${jugador.derribats}`;
 
-        if (jugador.derribats >= 10 && nivell === 1) {
-          passarDeNivell();
-        }
-        if (jugador.derribats >= 25 && nivell === 2) {
-          passarDeNivell();
-        }
-        if (jugador.derribats >= 40 && nivell === 3 && !finalBoss) {
-          nivell += 1;
-          finalBoss = new FinalBoss();
-        }
+          if (jugador.derribats >= 10 && nivell === 1) {
+            passarDeNivell();
+          }
+          if (jugador.derribats >= 25 && nivell === 2) {
+            passarDeNivell();
+          }
+          if (jugador.derribats >= 40 && nivell === 3 && !finalBoss) {
+            nivell += 1;
+            finalBoss = new FinalBoss();
+          }
 
-        break;
+          break;
+        }
       }
     }
   }
-}, fotogrames);
+, fotogrames);
+
+// ✅ Funció per guardar el progrés del jugador
+function guardarProgreso() {
+  fetch("/bakend/jocs/guarda_progres_jugador.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      nivell: nivell,
+      punts: jugador.punts
+    })
+  })
+  .then(res => {
+    if (res.ok) {
+      console.log("✅ Progreso guardado:", nivell, jugador.punts);
+    } else {
+      console.error("❌ Error al guardar progreso");
+    }
+  })
+  .catch(err => console.error("❌ Error de red:", err));
+}

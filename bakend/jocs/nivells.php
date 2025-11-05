@@ -1,5 +1,5 @@
 <?php
-require_once 'datosservidor.php';
+require_once './datosservidor.php';
 
 $joc_id = $_GET['joc_id'] ?? 1;
 

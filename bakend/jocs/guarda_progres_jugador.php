@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'datosservidor.php';
+require_once './datosservidor.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 $nivell = $data['nivell'] ?? 1;
