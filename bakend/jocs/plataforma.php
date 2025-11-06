@@ -69,7 +69,7 @@ if ($usuari_id) {
             <a href="./../../joc/index.php">
                 <article style="--avarage-color: #94af95ff">
                     <figure>
-                        <img src="./../../img/nave.jpg">
+                        <img src="./../../img/Portada-STARBLAST.png">
                         <figcaption>STARBLAST</figcaption>
                     </figure>
                 </article>

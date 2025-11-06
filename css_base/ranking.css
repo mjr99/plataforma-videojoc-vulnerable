@@ -1,0 +1,69 @@
+body {
+  background: radial-gradient(circle, #0f0f0f, #000000);
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.contenedor {
+  text-align: center;
+  background-color: rgba(20, 20, 20, 0.8);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #00ffcc;
+  width: 500px;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  color: #00ffcc;
+  text-shadow: 0 0 10px #00ffcc;
+}
+
+.ranking {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.ranking th, .ranking td {
+  padding: 12px;
+  border-bottom: 1px solid #444;
+}
+
+.ranking th {
+  background-color: #111;
+  color: #00ffcc;
+  font-size: 1.2em;
+}
+
+.ranking td {
+  font-size: 1.1em;
+}
+
+.ranking tr:nth-child(odd) {
+  background-color: #222;
+}
+
+.volver {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #00ffcc;
+  color: #000;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00ffcc;
+  transition: background 0.3s;
+}
+
+.volver:hover {
+  background-color: #00ffaa;
+}

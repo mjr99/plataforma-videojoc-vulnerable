@@ -1,3 +1,70 @@
+<?php
+// PHP Script para manejar el registro de nuevos usuarios.
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Incluye el archivo de conexión
+require_once '/var/www/html/bakend/jocs/datosservidor.php';
+
+// Verifica que la conexión esté activa
+if (!$conn) {
+    die("❌ Error de conexión con la base de datos<br>");
+}
+
+$mensaje = ''; // Mensaje para mostrar errores o éxito
+
+// =================================================================
+// LÓGICA DE REGISTRO
+// =================================================================
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 1. Recolección y sanitización básica de datos
+    $nom_complet = trim($_POST['nombre'] ?? '');
+    $nom_usuari = trim($_POST['usuario'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $contrasenya = trim($_POST['contrasenya'] ?? ''); // Contraseña en texto plano
+
+    // 2. Validación mínima de campos
+    if (empty($nom_complet) || empty($nom_usuari) || empty($email) || empty($contrasenya)) {
+        $mensaje = "❌ Totes les dades són obligatòries.";
+    } else {
+        // 3. Preparar la consulta de inserción (manteniendo la columna password_hash para la contraseña en texto plano)
+        $sql = "INSERT INTO usuaris (nom_complet, nom_usuari, email, password_hash) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            // Error al preparar la consulta
+            die("❌ Error preparant la consulta d'inserció: " . $conn->error . "<br>");
+        }
+
+        // 4. Vincular parámetros y ejecutar
+        $stmt->bind_param("ssss", $nom_complet, $nom_usuari, $email, $contrasenya);
+
+        if ($stmt->execute()) {
+            // Inserción exitosa. Redirigir al login
+            $stmt->close();
+            $conn->close();
+            // Mensaje de éxito antes de la redirección
+            $_SESSION['registro_exito'] = "✅ Usuari registrat correctament! Ja pots iniciar sessió.";
+            header("Location: ./../../index.php");
+            exit();
+        } else {
+            // Error en la ejecución (ej: nombre de usuario duplicado)
+            if ($conn->errno === 1062) { // Código de error SQL para entrada duplicada
+                $mensaje = "❌ El nom d'usuari o el correu electrònic ja existeixen.";
+            } else {
+                $mensaje = "❌ Error al registrar l'usuari: " . $stmt->error;
+            }
+            $stmt->close();
+        }
+    }
+}
+
+$conn->close();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +77,7 @@
     <form action="registre.php" method="POST">    
         <div class="border">
             <div class="login">
+                <h2>Creant Usuari</h2>
                 <div class="inputBx">
                     <input type="text" name="nombre" placeholder="Nom Complet" required>
                 </div>
@@ -23,9 +91,15 @@
                     <input type="password" name="contrasenya" placeholder="Contrasenya" required>
                 </div>
                 <div class="inputBx">
-                    <input type="submit" name="continuar" value="CONTINUAR">
+                    <input type="submit" value="CONTINUAR">
                 </div>
                 
+                <?php if ($mensaje): ?>
+                    <div style="color: red; font-weight: bold; text-align: center; margin-top: 10px;">
+                        <?= $mensaje ?>
+                    </div>
+                <?php endif; ?>
+
                 <div class="links">
                     <a href="./../index.php">Iniciar sessió</a>
                 </div>
@@ -34,73 +108,4 @@
     </form>
 </body>
 </html>
-<?php
-    session_start();
-    #echo "✅ Sesión iniciada<br>";
 
-    // Incluye el archivo de conexión
-    require_once './jocs/datosservidor.php';
-    #echo "✅ Conexión incluida<br>";
-
-    // Verifica que la conexión esté activa
-    if (!$conn) {
-        die("❌ Error de conexión con la base de datos<br>");
-    }
-    #echo "✅ Conexión con la base de datos OK<br>";
-
-    // Recoge los datos del formulario
-    $nombre = $_POST['nombre'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $usuario = $_POST['usuario'] ?? '';
-    $contrasenya = $_POST['contrasenya'] ?? ''; // Contraseña en texto plano
-
-    #echo "📥 Datos recibidos:<br>";
-    #echo "Nombre: $nombre<br>";
-    #echo "Email: $email<br>";
-    #echo "Usuario: $usuario<br>";
-    #echo "Contraseña: (oculta)<br>";
-
-    // Validación básica
-    if (isset($_POST['continuar'])) {
-        if (empty($nombre) || empty($email) || empty($usuario) || empty($contrasenya)) {
-            die("❌ Faltan campos por rellenar<br>");
-        }
-    
-        #echo "✅ Todos los campos están completos<br>";
-
-        // Prepara el INSERT
-        $sql = "INSERT INTO usuaris (nom_complet, email, nom_usuari, password_hash) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-
-        if (!$stmt) {
-            die("❌ Error preparando la consulta: " . $conn->error . "<br>");
-        }
-        #echo "✅ Consulta preparada<br>";
-
-        // Asocia los parámetros
-        $stmt->bind_param("ssss", $nombre, $email, $usuario, $contrasenya);
-        #echo "✅ Parámetros vinculados<br>";
-
-        // Ejecuta el INSERT
-        if ($stmt->execute()) { 
-            #echo "✅ Usuario insertado correctamente<br>";
-
-            // Crea la sesión
-            $_SESSION['nom_usuari'] = $usuario;
-            $_SESSION['email'] = $email;
-            $_SESSION['nom_complet'] = $nombre;
-            #echo "✅ Sesión creada<br>";
-
-            // Redirige
-            #echo "➡️ Redirigiendo a dashboard.php...<br>";
-            header("Location: ./../index.php");
-            exit();
-        } else {
-            #echo "❌ Error al insertar el usuario: " . $stmt->error . "<br>";
-        }
-
-        $stmt->close();
-        $conn->close();
-        #echo "✅ Conexión cerrada<br>";
-    }
-?>

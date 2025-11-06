@@ -72,10 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="submit" value="CONTINUAR">
                 </div>
                 <?php if ($mensaje): ?>
-                <div style="color: red; font-weight: bold; text-align: center;">
-                    <?= $mensaje ?>
-                </div>
-            <?php endif; ?>
+                    <div style="color: red; font-weight: bold; text-align: center;">
+                        <?= $mensaje ?>
+                    </div>
+                <?php endif; ?>
                 <div class="links">
                     <a href="./bakend/registre.php">Registrar-se</a>
                 </div>

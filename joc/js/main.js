@@ -121,6 +121,10 @@ function mostrarVictoria() {
   win.style.fontSize = "60px";
   win.style.zIndex = "200";
   pantalla.append(win);
+  guardarProgreso(); // ✅ Guardar puntuación final al ganar
+  console.log("🏆 Guardando puntuación final tras victoria:", jugador.punts);
+
+
 }
 
 // Bucle del joc
@@ -254,25 +258,25 @@ setInterval(() => {
     }
   }
 , fotogrames);
-
-// ✅ Funció per guardar el progrés del jugador
 function guardarProgreso() {
-  fetch("/bakend/jocs/guarda_progres_jugador.php", {
+  console.log("📤 Enviando progreso:", jugador.nom, jugador.punts);
+
+  fetch("../bakend/jocs/guarda_progres_jugador.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      nivell: nivell,
+      nomUsuari: jugador.nom,
       punts: jugador.punts
     })
   })
   .then(res => {
-    if (res.ok) {
-      console.log("✅ Progreso guardado:", nivell, jugador.punts);
-    } else {
-      console.error("❌ Error al guardar progreso");
-    }
+    console.log("📥 Respuesta del servidor:", res.status);
+    return res.text();
   })
-  .catch(err => console.error("❌ Error de red:", err));
+  .then(text => {
+    console.log("📄 Contenido recibido:", text);
+  })
+  .catch(err => console.error("❌ Error de xarxa:", err));
 }
