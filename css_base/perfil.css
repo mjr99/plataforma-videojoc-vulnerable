@@ -8,7 +8,7 @@
 }
 
 body {
-    background: #111; /* Fondo oscuro del login */
+    background: #111;
     color: #fff;
     display: flex;
     justify-content: center;
@@ -16,52 +16,124 @@ body {
     min-height: 100vh;
 }
 
+/* ----------------------------------------------------------------- */
+/* CONTENEDOR PRINCIPAL Y TÍTULO */
+/* ----------------------------------------------------------------- */
+
 .perfil-container {
-    background-color: transparent; /* Fondo transparente */
+    background-color: transparent;
     padding: 30px;
     border-radius: 40px; 
-    /* width: 400px;  <-- ELIMINAMOS el ancho fijo */
-    max-width: 90%; /* Para que no se desborde en pantallas pequeñas */
-    display: flex; /* Añadimos flex para que el ancho se ajuste al contenido */
-    flex-direction: column; /* Apilamos los elementos verticalmente */
-    align-items: center;
+    max-width: 900px; /* Ancho máximo para el diseño de dos columnas */
+    width: 90%; 
+    display: flex; 
+    flex-direction: column; /* Apila Título y Grid */
     border: 2px solid #fff;
     text-align: center;
 }
 
-/* Título */
-.perfil-container h1 {
-    margin-bottom: 0px; 
+/* Título de la página */
+.titulo h1 {
+    margin-bottom: 30px; /* Separación del título con la rejilla */
+    margin-left: 30%;
     font-size: 2em; 
     font-weight: 500;
     color: #fff; 
-    white-space: nowrap; /* Evita que el título se rompa en varias líneas */
-    padding: 0 20px; /* Añade un poco de padding para que el recuadro no quede pegado al texto */
+    white-space: nowrap; 
+    padding: 0 20px; 
+    text-align: center;
 }
 
-.perfil-container h2 {
-    margin-bottom: 45px;
-    font-size: 2.5em; 
+/* Nombre de usuario (Pie de imagen en columna izquierda) */
+.nombre-usuario {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    font-size: 1.5em; 
     font-weight: 500;
     color: #fff; 
-    padding: 0 20px;
+    padding: 0;
+    white-space: nowrap;
 }
+
+/* ----------------------------------------------------------------- */
+/* FLEXBOX PARA DISTRIBUCIÓN DE COLUMNAS */
+/* ----------------------------------------------------------------- */
+
+.perfil-grid {
+    display: flex;
+    gap: 30px; 
+    align-items: stretch; /* CRÍTICO: Estira el separador y columnas a la misma altura */
+    width: 100%; 
+}
+
+/* COLUMNA IZQUIERDA: Fija y centrada */
+.columna-izquierda {
+    width: 200px; /* Ancho fijo para la imagen y el nombre */
+    flex-shrink: 0; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* COLUMNA DERECHA: Flexible para inputs */
+.columna-derecha {
+    flex-grow: 1; 
+    text-align: left; /* Alinea los inputs a la izquierda de la columna */
+}
+
+/* ----------------------------------------------------------------- */
+/* IMAGEN DE PERFIL */
+/* ----------------------------------------------------------------- */
+
+.imagen-recuadro {
+    width: 150px; 
+    height: 150px;
+    border-radius: 15px; /* Mismo radio que inputs */
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 2px solid #fff; /* Borde que coincide con inputs */
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); 
+}
+
+.imagen-recuadro img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.estadisticas {
+    display: block; /* Mostramos como bloque para que salte de línea */
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    width: 150px;
+    /*height: auto;*/
+    height: 100%;
+    align-content: center;
+    justify-content: center;
+}
+
+/* ----------------------------------------------------------------- */
+/* FORMULARIOS E INPUTS */
+/* ----------------------------------------------------------------- */
 
 .form-group {
     margin-bottom: 30px; 
-    width: 100%; /* Asegura que los campos sigan ocupando el 100% del contenedor padre */
-    /* text-align: left; <-- Ya no es necesario si eliminamos las etiquetas y centramos todo con flex */
+    width: 100%;
 }
 
-/* Ocultar etiquetas (si se mantiene el HTML y se prefiere ocultarlas con CSS) */
 label {
-    display: none; /* Oculta las etiquetas, como solicitaste */
+    display: block; /* Mostramos como bloque para que salte de línea */
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 5px;
+    font-size: 0.9em;
 }
 
-/* Campos de Input (Apodo y Biografía) */
 input[type="text"],
 input[type="password"],
-
 textarea {
     width: 100%;
     padding: 12px 20px;
@@ -71,57 +143,99 @@ textarea {
     color: #fff;
     font-size: 1.2em;
     outline: none;
-    box-shadow: none;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 textarea {
-    resize: none;
+    resize: vertical; 
     border-radius: 20px; 
     padding: 15px 20px;
 }
 
-/* Estilo para la línea separadora */
-.separador-perfil {
-    width: 100%; /* Ocupa el 80% del ancho del contenedor */
-    height: 3px; /* Grosor de la línea */
-    margin: 10px auto 35px auto; /* Centrado y espaciado (arriba: 10px, abajo: 35px) */
-    
-    /* Degradado sutil para que coincida con el tema neón */
-    background: linear-gradient(90deg, 
-                rgba(255, 255, 255, 0) 0%, /* Blanco transparente al inicio */
-                rgba(255, 255, 255, 0.4) 50%, /* Blanco sutil en el centro */
-                rgba(255, 255, 255, 0) 100% /* Blanco transparente al final */
-               );
-    border-radius: 2px;
-}
-
-/* Estilo específico para el campo de archivo */
 input[type="file"] {
     width: 100%;
     color: rgba(255, 255, 255, 0.8);
     background: transparent;
-    padding: 10px;
-    border: 1px solid #444; 
-    border-radius: 15px;
     border: 2px solid #fff;
-    padding: 15px
+    border-radius: 15px;
+    padding: 15px;
 }
 
-/* Botón 'Guardar perfil' */
-button {
-    margin-bottom: 20px;
-    width: 100%; 
-    padding: 15px;
+.foto-actual-info {
+    font-size: 0.9em; 
+    color: rgba(255, 255, 255, 0.7); 
+    margin-top: 5px;
+}
+.foto-actual-info a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------- */
+/* SEPARADORES */
+/* ----------------------------------------------------------------- */
+
+/* Separador horizontal (entre campos, ya existente) */
+.separador-perfil {
+    width: 100%;
+    height: 3px;
+    margin: 10px auto 35px auto;
+    background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                rgba(255, 255, 255, 0) 100% 
+               );
+    border-radius: 2px;
+}
+
+/* Separador Vertical (entre columnas) */
+.separador-vertical {
+    width: 2px;
+    height: auto;
+    background: linear-gradient(0deg, /* Degradado vertical */
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                rgba(255, 255, 255, 0) 100% 
+               );
+    border-radius: 1px;
+}
+
+/* ----------------------------------------------------------------- */
+/* BOTONES (Restauración de estilo original) */
+/* ----------------------------------------------------------------- */
+
+/* Contenedor de botones (para colocarlos uno al lado del otro) */
+.contenedor-botones {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    gap: 15px; /* Separación entre los dos botones */
+}
+
+/* Botones con las clases originales */
+.guardar, .tencar {
+    padding: 15px 30px;
     border: none;
     border-radius: 40px; 
     font-size: 1.2em;
     font-weight: bold;
     color: #111; 
     cursor: pointer;
-    transition: opacity 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex-grow: 1; 
+    max-width: 50%;
+}
+
+.guardar {
     background: linear-gradient(45deg, #e4ff35, #72ff91);
 }
 
-button:hover {
+.tencar {
+    background: linear-gradient(45deg, #ffe031, #ff4e4e);
+}
+
+.guardar:hover, .tencar:hover {
+    transform: translateY(-2px);
     opacity: 0.9;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
 }
