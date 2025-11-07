@@ -222,9 +222,9 @@ $mensaje_exito = ($_GET['status'] ?? '') === 'success' ? "✅ Perfil guardat cor
                     <!-- Pie de imagen (Nombre de usuario) -->
                     <h2 class="nombre-usuario"><?= $nom_usuari_session ?></h2>
 
-                    <div class="estadisticas">
+                    <a href="./ranking.php" class="estadisticas">
                         <h2> IN COMING... </h2>
-                    </div>
+                    </a>
 
                 </div>
 

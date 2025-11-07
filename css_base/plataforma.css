@@ -1,0 +1,252 @@
+@layer tokens {
+    /* Fuente utilizada para títulos */
+    @font-face {
+        font-family: Troubleside;
+        src: url("https://cdn.jsdelivr.net/gh/chytanka/chytanka.github.io/src/assets/fonts/Troubleside.ttf");
+        font-display: swap;
+    }
+
+    :root {
+        --ratio: 257 / 364;
+        --min-card-width: 192px;
+        --text: white;
+        --radius: 40px; /* Bordes redondeados grandes para contenedores principales (coherente con perfil.php) */
+        --card-radius: 15px; /* Bordes redondeados para las tarjetas */
+        --border-size: 2px; 
+        --neon-glow: 0 0 10px rgba(255, 255, 255, 0.4);
+
+        /* Estilos base del documento */
+        background: #111; /* Fondo negro sólido */
+        color: var(--text);
+        font-size: clamp(0.875rem, 0.8214285714rem + 0.2380952381vw, 1rem) !important;
+        line-height: 1.3;
+        font-family: 'Quicksand', Arial, sans-serif; /* Usamos Quicksand si está disponible o Arial */
+    }
+
+    /* Propiedades personalizadas para la animación de scroll */
+    @property --item-scale { syntax: "<number>"; inherits: true; initial-value: 1; }
+    @property --item-angle { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+}
+
+/* 🌟 ANIMACIONES DE PLIEGE AL HACER SCROLL 
+@layer animations {
+    @keyframes shrink-top {
+        0% { --item-scale: 0.5; --item-angle: -60deg; transform-origin: top; }
+    }
+    @keyframes shrink-bottom {
+        0% { --item-scale: 0.5; --item-angle: 60deg; transform-origin: bottom; }
+    }
+}*/
+
+/* ⚙️ BASE Para cualquier navegador */
+@layer base {
+    body, figure { margin: 0; }
+    img { width: 100%; height: auto; }
+    *, *::before, *::after { box-sizing: border-box; }
+    a { text-decoration: none; color: white; }
+}
+
+/* 🎨 COMPONENTES */
+@layer components {
+    /* 1. Encabezado y Título */
+    .encabezado {
+        display: flex;
+		align-content: center;
+		justify-content: center;
+		width: 100%;
+        max-width: 1200px; /* Ancho máximo para centrar */
+        min-height: 100px;
+		padding: 1.5rem;
+        position: relative;
+    }
+
+    h1 {
+        color: rgb(255, 255, 255); 
+        font-family: Troubleside;
+        margin: 1.5rem;
+        text-align: center;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Efecto neón suave en el título */
+		
+    }
+
+    main {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 2rem; 
+        background-color: #111;
+    }
+
+    /* 2. Avatar y Pop-up de Perfil */
+    .avatar-container {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1000;
+        text-align: right;
+    }
+
+    .avatar {
+        width: 107px;
+        height: 107px;
+        border-radius: 15%;
+        border: 3px solid white; 
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+		align-content: center;
+    }
+
+    .avatar:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px #e4ff35, 0 5px 10px #72ff91;
+    }
+    
+    /* Contenedor flotante de información de perfil */
+    .perfil-info {
+        /* Estilo general de la caja */
+        position: absolute;
+        top: -20px; /* Debajo del avatar */
+        right: 130px;
+        background-color: rgba(0, 0, 0, 0.8); /* Fondo negro semi-transparente */
+        border: 1px solid white;
+        border-radius: 15px;
+        padding: 15px;
+        min-width: 150px;
+        color: white;
+        font-size: 0.9rem;
+        z-index: 999;
+		text-align: center;
+        
+        /* Ocultar por defecto y mostrar al pasar el ratón por el avatar-container */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .avatar-container:hover .perfil-info {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .perfil-info p {
+        margin: 5px 0;
+    }
+
+    .perfil-info span {
+        font-weight: bold;
+        color: #90ee90; /* Color distintivo para valores */
+    }
+
+    .user-name-title {
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 5px !important;
+    }
+
+    .neon-divider {
+        border: none;
+        height: 1px;
+        background-color: white;
+        box-shadow: 0 0 5px white;
+        margin: 10px 0 10px 0;
+    }
+
+    .profile-link {
+        display: block;
+        margin-top: 10px;
+        text-align: center;
+        color: #ffd60a; /* Color de acento para el enlace */
+        text-decoration: underline;
+    }
+
+    /* 3. Contenedor de Soportes de Portadas */
+    section {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(var(--min-card-width), 1fr));
+        gap: 1.5rem;
+        justify-content: center;
+        padding: 2rem;
+        perspective: 4000px;
+        width: 100%;
+        max-width: 10000px;
+    }
+
+    /* 📱 Responsivo */
+    @media (max-width: 1000px) {
+        section {
+            grid-template-columns: repeat(2, minmax(var(--min-card-width), 1fr));
+        }
+    }
+
+    @media (max-width: 600px) {
+        section {
+            grid-template-columns: repeat(1, minmax(var(--min-card-width), 1fr));
+        }
+    }
+
+    /* 4. Soporte de Portadas (`article`) */
+    article {
+        /* Reseteamos variables innecesarias */
+        --deg: 0deg;
+        --y: 0;
+
+        /* APLICAMOS EL ESTILO SOLICITADO */
+        border: var(--border-size) solid white; /* Borde blanco de 2px */
+        border-radius: var(--card-radius); /* Esquinas redondeadas (15px) */
+        background-color: rgba(17, 17, 17, 0.9); /* Fondo negro semi-transparente */
+        
+        /* Efecto Sombra/Neón suave (Blanco) */
+        box-shadow: var(--neon-glow); 
+        
+        /* Mantenemos las propiedades de transformación y animación */
+        opacity: var(--item-scale);
+        transform: rotate(var(--deg)) translateY(var(--y)) scale(var(--item-scale)) rotateX(var(--item-angle));
+        transition: all 0.3s ease-in-out;
+        will-change: transform;
+        transform-style: preserve-3d;
+        cursor: pointer;
+
+        &:hover {
+            --deg: 0 !important;
+            --y: -5px; /* Pequeño levantamiento al pasar el ratón */
+            box-shadow: 0 0 15px #e4ff35, 0 5px 10px #72ff91; 
+            opacity: 1;
+        }
+    }
+
+    @supports (animation-timeline: view()) {
+        article {
+            animation: shrink-top both ease-in-out,
+                shrink-bottom both ease-in-out reverse;
+            animation-timeline: view(block);
+            animation-range: entry, exit;
+        }
+    }
+
+    figure img {
+        aspect-ratio: var(--ratio);
+        object-fit: cover;
+        /* La imagen debe tener un pequeño margen dentro de la tarjeta */
+        border-radius: calc(var(--card-radius) - 3px); 
+        margin: 3px; 
+        width: calc(100% - 6px); /* Para compensar el margin */
+        height: auto;
+    }
+
+    figure figcaption {
+        /* Pie de imagen: Nombre del videojuego o ????????? */
+        margin: 1ch;
+        line-clamp: 1;
+        overflow: hidden;
+        word-break: break-word;
+        line-height: 1;
+        text-align: center;
+        color: white; 
+        font-weight: bold;
+        padding: 10px 0 15px 0;
+        text-shadow: 0 0 2px white; /* Pequeño brillo para el texto */
+    }
+}
