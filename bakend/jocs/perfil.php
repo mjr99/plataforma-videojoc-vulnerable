@@ -3,43 +3,31 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Incluye el archivo de conexión
-require_once '/var/www/html/bakend/jocs/datosservidor.php';
-
-// Verifica que la conexión esté activa
-if (!$conn) {
-    die("❌ Error de conexión con la base de datos<br>");
+if (!isset($_SESSION['usuari_id'])) {
+    header("Location: ./../../index.php");
+    exit();
 }
+
+// Incluye el archivo de conexión
+require_once './datosservidor.php';
 
 // =================================================================
 // 1. OBTENER ID DEL USUARIO DESDE LA SESIÓN
 // =================================================================
 $userId = $_SESSION['usuari_id'] ?? null; 
-
-if (!$userId) {
-    // Si no hay ID de usuario en sesión, redirigir a login
-    header('Location: ./../../index.php'); 
-    exit();
-}
-// Obtenemos el nombre de usuario de la sesión para el título del perfil
 $nom_usuari_session = $_SESSION['usuario'] ?? 'usuari';
-
 
 // =================================================================
 // FASE DE LECTURA DE DATOS DE PERFIL (Para mostrar en el formulario)
 // =================================================================
 $apodo_actual = '';
 $bio_actual = '';
-$foto_actual = '';
+$foto_actual = 'img/Foto-sin-foto-1.jpeg';
 $perfilExiste = false;
 
 // Intentamos obtener el perfil del usuario actual (ID 1)
 $sql_select = "SELECT apodo, foto_perfil, bio FROM perfil_usuario WHERE id = ?";
 $stmt_select = $conn->prepare($sql_select);
-
-if (!$stmt_select) {
-    die("❌ Error preparando la consulta de lectura de perfil: " . $conn->error . "<br>");
-}
 
 $stmt_select->bind_param("i", $userId);
 $stmt_select->execute();
@@ -50,7 +38,9 @@ if ($resultado->num_rows > 0) {
     $datos = $resultado->fetch_assoc();
     $apodo_actual = htmlspecialchars($datos['apodo'] ?? '');
     $bio_actual = htmlspecialchars($datos['bio'] ?? '');
-    $foto_actual = htmlspecialchars($datos['foto_perfil'] ?? '');
+    if (!empty($datos['foto_perfil'])) { 
+        $foto_actual = htmlspecialchars($datos['foto_perfil']);
+    }    
     $perfilExiste = true;
 }
 $stmt_select->close();
@@ -142,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $apodo_final = !empty($apodo) ? $apodo : $apodo_actual;
         $bio_final = !empty($bio) ? $bio : $bio_actual;
                 
-        // 2. Determinar si es INSERT o UPDATE
+        // 2. Determinar si es INSERT o UPDATE  
         if ($perfilExiste) {
             // OPCIÓN 2: El perfil YA existe -> Usamos UPDATE
             $sql = "UPDATE perfil_usuario SET apodo = ?, foto_perfil = ?, bio = ? WHERE id = ?";
@@ -179,8 +169,6 @@ $mensaje_exito = ($_GET['status'] ?? '') === 'success' ? "✅ Perfil guardat cor
 
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -189,24 +177,21 @@ $mensaje_exito = ($_GET['status'] ?? '') === 'success' ? "✅ Perfil guardat cor
     <title>Editor de Perfil</title>
     <link rel="stylesheet" href="/css_base/perfil.css">
 </head>
-<body>
+<body>    
     <div class="perfil-container">
         <!-- TÍTULO PRINCIPAL DENTRO DEL RECUADRO -->
         <div class="titulo">
+            <div class="cabecera-nav">
+                <button class="atras" onclick="history.back()"></button>
+            </div>
             <h1>🎮 Personalitza el teu perfil 🎮</h1>
         </div>
 
         <form action="perfil.php" method="POST" enctype="multipart/form-data">
-            <!-- INICIO DEL CONTENEDOR DE DOBLE COLUMNA -->
-            <div class="perfil-grid">
-                
-                <!-- COLUMNA IZQUIERDA: Imagen y Nombre de Usuario -->
+            <div class="perfil-grid">                
                 <div class="columna-izquierda">
-                    
-                    <!-- 1. INPUT FILE OCULTO -->
                     <!-- Damos a este input el ID 'foto-upload' y lo vinculamos a la etiqueta que envolverá la imagen -->
                     <input type="file" name="foto" id="foto-upload" accept="image/*" style="display: none;">
-
                     <!-- 2. RECUADRO DE IMAGEN COMO ÁREA CLICABLE -->
                     <!-- La etiqueta 'label' apunta al input oculto, haciendo que el clic funcione -->
                     <label for="foto-upload" class="imagen-label">
@@ -223,7 +208,7 @@ $mensaje_exito = ($_GET['status'] ?? '') === 'success' ? "✅ Perfil guardat cor
                     <h2 class="nombre-usuario"><?= $nom_usuari_session ?></h2>
 
                     <a href="./ranking.php" class="estadisticas">
-                        <h2> IN COMING... </h2>
+                        <h2> RANKING IN COMING... (clic para ir) </h2>
                     </a>
 
                 </div>

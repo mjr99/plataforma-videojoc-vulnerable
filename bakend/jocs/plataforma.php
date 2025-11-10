@@ -48,10 +48,17 @@ if ($stmt_img) {
 
     if ($fila_img = $result_img->fetch_assoc()) {
         // Usamos la columna 'foto_perfil' que has confirmado
+        // Si el valor de la base de datos NO está vacío, lo usamos.
         if (!empty($fila_img['foto_perfil'])) {
             // Se asume que las rutas de imagen son relativas al directorio raíz (/)
             $imagen_perfil = $fila_img['foto_perfil'];
+        } else {
+            $imagen_perfil = "img/Foto-sin-foto-1.jpeg"; // <-- DEBERÍA SER ESTE CAMBIO
         }
+
+    } else {
+        // Si no existe el registro de perfil, también usamos la imagen por defecto
+        $imagen_perfil = "img/Foto-sin-foto-1.jpeg";
     }
     $stmt_img->close();
 }
@@ -62,10 +69,7 @@ if (isset($conn) && $conn->ping()) {
 }
 
 // Para asegurar la ruta correcta en el HTML
-$ruta_imagen = (strpos($imagen_perfil, './') === 0 || strpos($imagen_perfil, 'uploads/') === 0) 
-    ? './../../' . ltrim($imagen_perfil, './') 
-    : $imagen_perfil;
-?>
+$ruta_imagen = (strpos($imagen_perfil, './') === 0 || strpos($imagen_perfil, 'uploads/') === 0) ? './../../' . ltrim($imagen_perfil, './') : $imagen_perfil; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,7 +87,7 @@ $ruta_imagen = (strpos($imagen_perfil, './') === 0 || strpos($imagen_perfil, 'up
                 <!-- Contenedor principal del avatar y el pop-up -->
                 <a href="./perfil.php" class="avatar-link">
                     <!-- Ruta de imagen corregida -->
-                    <img src="<?= htmlspecialchars($ruta_imagen) ?>" alt="Perfil" class="avatar">
+                    <img src="/<?= htmlspecialchars($ruta_imagen) ?>" alt="Perfil" class="avatar">
                 </a>
                 
                 <!-- Contenedor del pop-up de información -->

@@ -15,6 +15,38 @@ body {
     align-items: center;
     min-height: 100vh;
 }
+.titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    padding: 10px;
+}
+
+/* SEPARACIÓN DEL BOTÓN DEL TÍTULO */
+.cabecera-nav {
+    margin-bottom: 25px; 
+}
+
+/* ESTILO DE BOTONES: Aplica el estilo de input con borde y glow */
+.cabecera-nav button {
+    background: #222222;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.782); 
+    border-radius: 10px;
+    padding: 8px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cabecera-nav button:hover {
+    box-shadow: 0 0 10px #e4ff35, 0 0 10px #72ff91;
+}
+
+.cabecera-nav button.atras::before {
+    content: "←";
+}
 
 /* ----------------------------------------------------------------- */
 /* CONTENEDOR PRINCIPAL Y TÍTULO */
@@ -34,14 +66,14 @@ body {
 
 /* Título de la página */
 .titulo h1 {
-    margin-bottom: 30px; /* Separación del título con la rejilla */
-    margin-left: 30%;
-    font-size: 2em; 
+    margin-bottom: 30px;
+    font-size: 2em;
     font-weight: 500;
-    color: #fff; 
-    white-space: nowrap; 
-    padding: 0 20px; 
+    color: #fff;
+    white-space: nowrap;
+    padding: 0 20px;
     text-align: center;
+    width: auto;
 }
 
 /* Nombre de usuario (Pie de imagen en columna izquierda) */
@@ -183,8 +215,7 @@ input[type="file"] {
     background: linear-gradient(90deg, 
                 rgba(255, 255, 255, 0) 0%, 
                 rgba(255, 255, 255, 0.4) 50%, 
-                rgba(255, 255, 255, 0) 100% 
-               );
+                rgba(255, 255, 255, 0) 100%);
     border-radius: 2px;
 }
 
@@ -195,8 +226,7 @@ input[type="file"] {
     background: linear-gradient(0deg, /* Degradado vertical */
                 rgba(255, 255, 255, 0) 0%, 
                 rgba(255, 255, 255, 0.4) 50%, 
-                rgba(255, 255, 255, 0) 100% 
-               );
+                rgba(255, 255, 255, 0) 100%);
     border-radius: 1px;
 }
 
@@ -239,3 +269,4 @@ input[type="file"] {
     opacity: 0.9;
     box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
 }
+

@@ -20,7 +20,11 @@ $nom_usuari = $_SESSION['usuario'] ?? 'Jugador';
   </head>
   <body>
     <div id="pantalla"></div>
-    <div id="infoPartida"></div>
-    
+    <div class="cabecera-nav">
+      <button class="atras" onclick="history.back()"></button>
+      <button class="reiniciar" onclick="location.reload()"></button>
+    </div>
+    <div id="infoPartida">
+    </div>
   </body>
 </html>
